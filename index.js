@@ -1,6 +1,6 @@
 //todo make api call with the riot api, then fetch summoner id from safoekillmachine to continue building
 
-const riotKey = "api_key=RGAPI-13d35355-91a5-45d0-b627-f0dc87773ff6"
+const riotKey = "api_key=RGAPI-xxxx-xxxx-xxx-xxx-xxx"
 const btnSr = document.getElementById("btn-sr")
 const welcomeMsg = document.getElementById("welcomeMsg")
 const btnMastery = document.getElementById("btn-mastery")
