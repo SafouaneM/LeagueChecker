@@ -8,7 +8,9 @@ const ulMastery = document.getElementById("ul-mastery")
 let summoner = ""
 let mastery = []
 let champion = []
-let image = ""
+let image = []
+let championName = []
+
 
 //for later on
 // const summonerFromLocalStorage = localStorage.getItem("mySummoner")
@@ -39,12 +41,14 @@ async function fetchChampions() {
     return champion
 }
 
-// async function fetchChampionImg(champion) {
-//     let link = `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${champion}.png`
-//     const response = await fetch(link)
-//     const championImg = await response
-//     return championImg
-// }
+async function fetchChampionImg(champ) {
+    let link = `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${champ}.png`
+    const response = await fetch(link)
+    const championImg = await response
+    return championImg
+}
+
+
 
 
 btnSr.addEventListener("click", async () => {
@@ -56,7 +60,7 @@ btnSr.addEventListener("click", async () => {
     } catch (error) {
         console.log("error", error)
     }
-    welcomeMsg.textContent += `Welcome ${summoner.name}, your userid is ${summoner.id}`
+    welcomeMsg.textContent += `Welcome ${summoner.name}, ready to exist?`
 
     console.log(summoner)
 
@@ -64,10 +68,12 @@ btnSr.addEventListener("click", async () => {
 
 btnMastery.addEventListener("click", async () => {
     try {
-
         mastery = await fetchMasteryBySummonerId(summoner.id)
         champion = await fetchChampions()
-
+        for (let i = 0; i < image.length; i++ ) {
+            image = await fetchChampionImg("MissFortune")
+            console.log(image[i])
+        }
         let copyArray = []
 
         for (let i = 0; i < 11; i++) {
@@ -78,6 +84,7 @@ btnMastery.addEventListener("click", async () => {
             // https://stackoverflow.com/questions/921789/how-to-loop-through-a-plain-javascript-object-with-the-objects-as-members
             //https://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
             Object.keys(champion.data).forEach(key => {
+
                 copyArray.sort(function (a, b) {
                     if (a.championLevel > b.championLevel) {
                         return -1
@@ -86,9 +93,11 @@ btnMastery.addEventListener("click", async () => {
                         return 1
                     }
                     return 0
+
                 })
+
                     if (champion.data[key]['key'] == mastery[i].championId) {
-                        ulMastery.innerHTML += `<li>Champion:${champion.data[key]['name']}
+                        ulMastery.innerHTML += `<li>  ${champion.data[key]['name']}
                     and the points ${mastery[i].championPoints}
                     and your current level is ${mastery[i].championLevel}
                     have you aquired your chest? ${mastery[i].chestGranted}</li>`
@@ -99,7 +108,7 @@ btnMastery.addEventListener("click", async () => {
 
         }
     } catch (error) {
-        console.log("error", error)
+        console.log("error something went wrong ", error)
     }
 })
 
