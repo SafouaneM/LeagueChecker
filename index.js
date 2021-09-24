@@ -1,6 +1,6 @@
 //todo make api call with the riot api, then fetch summoner id from safoekillmachine to continue building
 
-const riotKey = "api_key=xxxx-xxxx-xxxx-xxxxxxx"
+const riotKey = "api_key=RGAPI-d71c3756-e69a-45f0-b934-f03bdca3c478"
 const btnSr = document.getElementById("btn-sr")
 const welcomeMsg = document.getElementById("welcomeMsg")
 const btnMastery = document.getElementById("btn-mastery")
@@ -68,34 +68,36 @@ btnMastery.addEventListener("click", async () => {
         mastery = await fetchMasteryBySummonerId(summoner.id)
         champion = await fetchChampions()
 
-        // image = await  fetchChampionImg("MissFortune")
+        let copyArray = []
 
-        // https://stackoverflow.com/questions/921789/how-to-loop-through-a-plain-javascript-object-with-the-objects-as-members
-        //https://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
-        Object.keys(champion.data).forEach(key => {
-            mastery.sort(function (a,b) {
-                if (a.championLevel > b.championLevel){
-                    return -1
-                }
-                if(a.championLevel < b.championLevel) {
-                    return 1
-                }
-                return 0
-            })
-            for (let i = 0; i < 11; i++) {
-                if (champion.data[key]['key']  == mastery[i].championId  ) {
-                    ulMastery.innerHTML += `<li>Champion:${champion.data[key]['name']}
-                    
+        for (let i = 0; i < 11; i++) {
+            if (mastery[i]) {
+                copyArray.push(mastery[i])
+            }
+
+            // https://stackoverflow.com/questions/921789/how-to-loop-through-a-plain-javascript-object-with-the-objects-as-members
+            //https://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
+            Object.keys(champion.data).forEach(key => {
+                copyArray.sort(function (a, b) {
+                    if (a.championLevel > b.championLevel) {
+                        return -1
+                    }
+                    if (a.championLevel < b.championLevel) {
+                        return 1
+                    }
+                    return 0
+                })
+                    if (champion.data[key]['key'] == mastery[i].championId) {
+                        ulMastery.innerHTML += `<li>Champion:${champion.data[key]['name']}
                     and the points ${mastery[i].championPoints}
                     and your current level is ${mastery[i].championLevel}
                     have you aquired your chest? ${mastery[i].chestGranted}</li>`
-                }
-            }
-
-        })
+                    }
 
 
+            })
 
+        }
     } catch (error) {
         console.log("error", error)
     }
